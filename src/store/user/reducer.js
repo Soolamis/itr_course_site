@@ -8,11 +8,11 @@ const userReducer = createReducer(
         id: undefined,
 
     }, {
-        [actions.login]: (state, payload) => {
+        [actions.login]: (state, action) => {
             return {
                 isAuthenticated: true,
-                name: payload.name,
-                id: payload.id,
+                name: action.payload.name,
+                id: action.payload.id,
             }
         }
     }

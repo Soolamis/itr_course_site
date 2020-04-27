@@ -1,5 +1,5 @@
-export function isAutheficated(state) {
-    return state.user.isAutheficated;
+export function isAuthenticated(state) {
+    return state.user.isAuthenticated;
 }
 
 export function name(state) {

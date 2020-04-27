@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
 import auth0 from '../../app/auth';
-import actions from '../../store/user/actions';
+import * as actions from '../../store/user/actions';
 import { useHistory } from 'react-router-dom';
 
 const Auth = ({
