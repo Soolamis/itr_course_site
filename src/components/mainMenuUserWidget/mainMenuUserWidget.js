@@ -30,6 +30,7 @@ const useStyles = makeStyles({
 
 export default function MainMenuUserWidget({
     name,
+    onLogout,
     locale = 'enUS'
 }) {
     const localeSet = locales[locale];
@@ -54,7 +55,10 @@ export default function MainMenuUserWidget({
                                 text={localeSet.profile}
                             />
                         </ListItem>
-                        <ListItem button>
+                        <ListItem 
+                            button
+                            onClick={onLogout}
+                        >
                             <LabelWithIcon
                                 icon={<LogoutIcon />}
                                 text={localeSet.logout}

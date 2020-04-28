@@ -8,7 +8,6 @@ import Divider from '@material-ui/core/Divider';
 import NavLinkListItem from '../navLinkListItem/navLinkListItem'
 import HomeIcon from '@material-ui/icons/Home';
 import CampaingsIcon from '@material-ui/icons/LocalLibrary';
-import ListItem from '@material-ui/core/ListItem';
 import MainMenuUserWidget from '../../containers/mainMenuUserWidget/mainMenuUserWidget';
 import Hidden from '@material-ui/core/Hidden';
 

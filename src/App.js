@@ -23,7 +23,6 @@ function App({
             .then(() => auth0.getUser().then(user => {
                 if (user) {
                     dispatch(login(user.sub, user.name))
-                    console.log('hi');
                 }
             }))
             .catch(err => console.log(err));
