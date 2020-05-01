@@ -6,7 +6,8 @@ import MenuIcon from '@material-ui/icons/Menu';
 import Typography from '@material-ui/core/Typography'
 import { makeStyles } from '@material-ui/core/styles';
 import localeSets from './locale';
-import AuthButtons from '../authButtons/authButtons';
+import HeaderUserWidget from '../../containers/headerUserWidget/headerUserWidget';
+import Hidden from '@material-ui/core/Hidden';
 
 const useStyles = makeStyles((theme) => ({
     menuButton: {
@@ -43,7 +44,9 @@ export default function Header({
                 >
                     {localeSet.pageName[pageName]}
                 </Typography>
-                <AuthButtons locale={locale}/>
+                <Hidden xsDown>
+                    <HeaderUserWidget />
+                </Hidden>
             </Toolbar>
         </AppBar>
     )

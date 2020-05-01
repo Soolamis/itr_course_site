@@ -1,13 +1,8 @@
 import React from 'react';
 import Button from '@material-ui/core/Button';
 import Box from '@material-ui/core/Box';
-import { makeStyles } from '@material-ui/core/styles';
-
-const useStyles = makeStyles((theme) => ({
-    button: {
-        color: theme.palette.primary.contrastText,
-    },
-}));
+import auth0 from '../../app/auth';
+import classnames from 'classnames';
 
 const buttonsText = {
     ruRU: {
@@ -22,27 +17,20 @@ const buttonsText = {
 
 export default function LoginButton({
     locale = 'enUS',
-    onSignInButtonClick,
-    onSignUpButtonClick,
+    className,
 }) {
     const localeSet = buttonsText[locale];
-    const styles = useStyles();
 
     return (
         <Box>
             <Button 
-                className={styles.button}
-                onClick={onSignInButtonClick}
+                className={classnames(className)}
+                onClick={async () => {
+                    await auth0.loginWithRedirect();
+                }}
                 aria-label='sign in'
             >
                 {localeSet.signIn}
-            </Button>
-            <Button 
-                className={styles.button}
-                onClick={onSignUpButtonClick}
-                aria-label='sign up'
-            >
-                {localeSet.signUp}
             </Button>
         </Box>
     )

@@ -7,7 +7,9 @@ import ArrowLeftIcon from '@material-ui/icons/ChevronLeft';
 import Divider from '@material-ui/core/Divider';
 import NavLinkListItem from '../navLinkListItem/navLinkListItem'
 import HomeIcon from '@material-ui/icons/Home';
-import CampaingsIcon from '@material-ui/icons/LocalLibrary'
+import CampaingsIcon from '@material-ui/icons/LocalLibrary';
+import MainMenuUserWidget from '../../containers/mainMenuUserWidget/mainMenuUserWidget';
+import Hidden from '@material-ui/core/Hidden';
 
 const locales = {
     ruRU: {
@@ -48,20 +50,24 @@ export default function MainMenu({
             open={isOpen}
             onClose={onClose}
         >
-            
-            <List 
+
+            <List
                 className={classes.surface}
-                component='nav' 
+                component='nav'
             >
-                <Button 
+                <Button
                     className={classes.closeButton}
                     onClick={onClose}
                 >
                     <ArrowLeftIcon />
                 </Button>
                 <Divider />
-                <NavLinkListItem 
-                    to='/' 
+                <Hidden smUp>
+                    <MainMenuUserWidget />
+                    <Divider />
+                </Hidden>
+                <NavLinkListItem
+                    to='/'
                     icon={HomeIcon}
                     text={localeSet.page.main}
                 />
