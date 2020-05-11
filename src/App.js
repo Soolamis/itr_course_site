@@ -13,11 +13,22 @@ import {
 import './App.css';
 import auth0 from './app/auth';
 import { login } from './store/user/actions';
+import Campaign from './containers/campaign/campaign';
+import { makeStyles } from '@material-ui/core/styles';
+import Container from '@material-ui/core/Container';
+
+const useStyles = makeStyles({
+    mainContent: {
+        marginTop: '3em',
+    }
+})
 
 function App({
     menuIsOpen,
     dispatch,
 }) {
+    const classes = useStyles();
+
     useEffect(() => {
         auth0.getTokenSilently()
             .then(() => auth0.getUser().then(user => {
@@ -32,17 +43,22 @@ function App({
         <div>
             <Router>
                 <Header pageName='main' />
-                <Switch>
-                    <Route exact path='/'>
-                        <MainMenu
-                            isOpen={menuIsOpen}
-                            onClose={() => dispatch(toggleMenu())}
-                        />
-                    </Route>
-                    <Route exact path='/auth'>
-                        <Auth />
-                    </Route>
-                </Switch>
+                <Container className={classes.mainContent}>
+                    <Switch>
+                        <Route exact path='/'>
+                            <MainMenu
+                                isOpen={menuIsOpen}
+                                onClose={() => dispatch(toggleMenu())}
+                            />
+                        </Route>
+                        <Route exact path='/auth'>
+                            <Auth />
+                        </Route>
+                        <Route exact path='/campaing/:id'>
+                            <Campaign />
+                        </Route>
+                    </Switch>
+                </Container>
             </Router>
         </div>
     )
