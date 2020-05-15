@@ -5,11 +5,15 @@ import App from './App';
 import { Provider } from 'react-redux';
 import store from './store/configure';
 import * as serviceWorker from './serviceWorker';
+import { MuiPickersUtilsProvider } from '@material-ui/pickers';
+import Moment from '@date-io/moment';
 
 ReactDOM.render(
   <React.StrictMode>
     <Provider store={store}>
-      <App />
+      <MuiPickersUtilsProvider utils={Moment}>
+        <App />
+      </MuiPickersUtilsProvider>
     </Provider>
   </React.StrictMode>,
   document.getElementById('root')

@@ -16,6 +16,11 @@ import { login } from './store/user/actions';
 import Campaign from './containers/campaign/campaign';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
+import EditCampaing from './containers/editCampaign/editCampaign';
+import {
+    EDIT_CAMPAING_CREATE,
+    EDIT_CAMPAING_EDIT,
+} from './constants';
 
 const useStyles = makeStyles({
     mainContent: {
@@ -43,16 +48,20 @@ function App({
         <div>
             <Router>
                 <Header pageName='main' />
+                <MainMenu
+                    isOpen={menuIsOpen}
+                    onClose={() => dispatch(toggleMenu())}
+                />
                 <Container className={classes.mainContent}>
                     <Switch>
                         <Route exact path='/'>
-                            <MainMenu
-                                isOpen={menuIsOpen}
-                                onClose={() => dispatch(toggleMenu())}
-                            />
+
                         </Route>
                         <Route exact path='/auth'>
                             <Auth />
+                        </Route>
+                        <Route exact path='/campaing/create'>
+                            <EditCampaing type={EDIT_CAMPAING_CREATE} />
                         </Route>
                         <Route exact path='/campaing/:id'>
                             <Campaign />
