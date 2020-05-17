@@ -14,7 +14,8 @@ import SelectLocale from '../selectLocale/selectLocale';
 import Markdown from 'react-markdown';
 import TextWithLocale from '../textFieldWithSelectLocale/textFieldWithSelectLocale';
 import ImageUpload from '../imageUpload/imageUpload';
-import EditGoal from '../editGoal/editGoal'
+import EditGoal from '../editGoal/editGoal';
+import EditMediaContent from '../editMediaContent/editMediaContent';
 
 const locales = {
     ruRU: {
@@ -24,6 +25,7 @@ const locales = {
         descriptionLabel: 'Описание',
         avatarLabel: 'Аватар',
         goalLabel: 'Цель',
+        mediaContentLabel: 'Содержание карусели',
     },
     enUS: {
         header: 'Create you new company!',
@@ -32,6 +34,7 @@ const locales = {
         descriptionLabel: 'Description',
         avatarLabel: 'Avatar',
         goalLabel: 'Goal',
+        mediaContentLabel: 'Carousel content'
     },
 }
 
@@ -68,8 +71,15 @@ export default function ({
     setAvatar,
     goalFinishDate,
     goalSum,
-    setGoalFinishDate, 
+    setGoalFinishDate,
     setGoalSum,
+    setMediaContentNewElemType,
+    mediaContent,
+    setMediaContentNewElemUrl,
+    setMediaContentNewElemPosition,
+    addMediaContent,
+    changeMediaContentPosition,
+    removeMediaContent,
 }) {
     const localeSet = locales[locale];
     const classes = useStyles();
@@ -168,7 +178,7 @@ export default function ({
                 <Grid
                     item
                     container
-                    spacind={1}
+                    spacing={1}
                     xs={12}
                 >
                     <Grid
@@ -179,16 +189,49 @@ export default function ({
                             {localeSet.goalLabel}
                         </Typography>
                     </Grid>
-                    <Grid 
+                    <Grid
                         item
                         xs={12}
                     >
-                        <EditGoal 
+                        <EditGoal
                             sum={goalSum}
                             onSumChange={setGoalSum}
                             date={goalFinishDate}
                             onDateChange={setGoalFinishDate}
-                        />    
+                        />
+                    </Grid>
+                </Grid>
+                <Grid
+                    item
+                    container
+                    xs={12}
+                    spacing={1}
+                >
+                    <Grid
+                        item
+                        xs={12}
+                    >
+                        <Typography variant='h5'>
+                            {localeSet.mediaContentLabel}
+                        </Typography>
+                    </Grid>
+                    <Grid
+                        item
+                        xs={12}
+                    >
+                        <EditMediaContent 
+                            newElemType={mediaContent.newElem.type}
+                            onChangeNewElemType={setMediaContentNewElemType}
+                            newElemUrl={mediaContent.newElem.url}
+                            onChangeNewElemUrl={setMediaContentNewElemUrl}
+                            newElemPosition={mediaContent.newElem.position}
+                            onChangeNewElemPosition={setMediaContentNewElemPosition}
+                            onChangePosition={changeMediaContentPosition}
+                            onDelete={removeMediaContent}
+                            onAdd={addMediaContent}
+                            elems={mediaContent.elems}
+                            elemsOrder={mediaContent.elemsOrder}
+                        />
                     </Grid>
                 </Grid>
                 <Grid

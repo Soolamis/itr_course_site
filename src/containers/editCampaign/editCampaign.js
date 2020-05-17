@@ -17,6 +17,7 @@ const mapStateToProps = (state) => {
         avatar: selectors.avatar(state),
         goalFinishDate: selectors.goalFinishDate(state),
         goalSum: selectors.goalSum(state),
+        mediaContent: selectors.mediaContent(state),
     }
 }
 
@@ -46,6 +47,25 @@ const mapDispatchToPros = (dispatch) => {
         setGoalSum: (cost) => {
             dispatch(actions.setGoalSum(cost));
         },
+        setMediaContentNewElemType: (type) => {
+            dispatch(actions.setMediaContentNewElemType(type));
+        },
+        setMediaContentNewElemUrl: (url) => {
+            dispatch(actions.setMediaContentNewElemUrl(url));
+        },
+        setMediaContentNewElemPosition: (position) => {
+            dispatch(actions.setMediaContentNewElemPosition(position));
+        },
+        addMediaContent: () => {
+            dispatch(actions.addMediaContent());
+            dispatch(actions.clearMediaContentNewElem());
+        },
+        removeMediaContent: (url) => {
+            dispatch(actions.removeMediaContent(url));
+        },
+        changeMediaContentPosition: (url, position) => {
+            dispatch(actions.changeMediaContentPosition({ url: url, position: position }));
+        }
     }
 }
 
