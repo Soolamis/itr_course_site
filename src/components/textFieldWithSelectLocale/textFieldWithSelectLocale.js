@@ -10,6 +10,7 @@ export default function ({
     onLocaleChange,
     nameText,
     nameLocale,
+    textLabel,
 }) {
     return (
         <Grid 
@@ -24,7 +25,7 @@ export default function ({
                 <TextField
                     name={nameText}
                     fullWidth
-                    label='Name'
+                    label={textLabel}
                     value={text}
                     onChange={e => onTextChange(e.target.value)}
                 />

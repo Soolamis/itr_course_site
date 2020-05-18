@@ -8,7 +8,8 @@ import FormControl from '@material-ui/core/FormControl';
 import InputLabel from '@material-ui/core/InputLabel';
 import { CAMPAING_TYPES as CAMPAING_TYPES_RU } from '../../ruRU';
 import { CAMPAING_TYPES as CAMPAING_TYPES_EN } from '../../enUS';
-import { LOCALE_DEFAULT } from '../../constants';
+import { LOCALE_RU, LOCALE_EN } from '../../constants';
+import { useLocale } from '../../app/locale';
 import MarkdownEditor from '../markdownEditor/markdownEditor';
 import SelectLocale from '../selectLocale/selectLocale';
 import Markdown from 'react-markdown';
@@ -16,9 +17,11 @@ import TextWithLocale from '../textFieldWithSelectLocale/textFieldWithSelectLoca
 import ImageUpload from '../imageUpload/imageUpload';
 import EditGoal from '../editGoal/editGoal';
 import EditMediaContent from '../editMediaContent/editMediaContent';
+import EditRewards from '../editRewards/editRewards';
 
 const locales = {
-    ruRU: {
+    [LOCALE_RU]: {
+        name: 'Название',
         header: 'Создайте вашу новую компанию!',
         campaignTypes: CAMPAING_TYPES_RU,
         campaignTypeLabel: 'Категория',
@@ -27,7 +30,8 @@ const locales = {
         goalLabel: 'Цель',
         mediaContentLabel: 'Содержание карусели',
     },
-    enUS: {
+    [LOCALE_EN]: {
+        name: 'Name',
         header: 'Create you new company!',
         campaignTypes: CAMPAING_TYPES_EN,
         campaignTypeLabel: 'Category',
@@ -56,7 +60,6 @@ function generateMenuItem(value) {
 }
 
 export default function ({
-    locale = LOCALE_DEFAULT,
     name,
     setName,
     nameLocale,
@@ -80,8 +83,16 @@ export default function ({
     addMediaContent,
     changeMediaContentPosition,
     removeMediaContent,
+    onChangeRewardsNewElem,
+    rewardsNewElem,
+    onChangeRewardsLocale,
+    rewardsLocale,
+    addReward,
+    rewards,
+    onChangeRewardPosition,
+    onDeleteReward,
 }) {
-    const localeSet = locales[locale];
+    const localeSet = locales[useLocale()];
     const classes = useStyles();
 
     return (
@@ -126,6 +137,7 @@ export default function ({
                                 locale={nameLocale}
                                 onTextChange={setName}
                                 onLocaleChange={setNameLocale}
+                                textLabel={localeSet.name}
                             />
                         </Grid>
                         <Grid
@@ -286,6 +298,21 @@ export default function ({
                         >
                             <Markdown source={description} />
                         </Grid>
+                    </Grid>
+                    <Grid 
+                        item
+                        xs={12}
+                    >
+                        <EditRewards 
+                            onChangeNewElem={onChangeRewardsNewElem}
+                            newElem={rewardsNewElem}
+                            onChangeLocale={onChangeRewardsLocale}
+                            locale={rewardsLocale}
+                            onAdd={addReward}
+                            rewards={rewards}
+                            onChangePosition={onChangeRewardPosition}
+                            onDelete={onDeleteReward}
+                        />
                     </Grid>
                 </Grid>
             </Grid>

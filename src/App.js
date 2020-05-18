@@ -60,10 +60,10 @@ function App({
                         <Route exact path='/auth'>
                             <Auth />
                         </Route>
-                        <Route exact path='/campaing/create'>
+                        <Route exact path='/campaign/create'>
                             <EditCampaing type={EDIT_CAMPAING_CREATE} />
                         </Route>
-                        <Route exact path='/campaing/:id'>
+                        <Route exact path='/campaign/:id'>
                             <Campaign />
                         </Route>
                     </Switch>

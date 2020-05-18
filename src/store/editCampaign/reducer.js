@@ -6,6 +6,8 @@ import {
 import {
     CAMPAING_TYPES,
     LOCALE_DEFAULT,
+    LOCALE_EN,
+    LOCALE_RU,
     MEDIA_IMAGE,
 } from '../../constants';
 
@@ -13,15 +15,15 @@ const dataSlice = createSlice({
     name: 'editCampaign/data',
     initialState: {
         name: {
-            enUS: '',
-            ruRU: '',
+            [LOCALE_EN]: '',
+            [LOCALE_RU]: '',
         },
         nameLocale: LOCALE_DEFAULT,
         campaignType: CAMPAING_TYPES.EDUCATION,
         descriptionLocale: LOCALE_DEFAULT,
         description: {
-            enUS: '',
-            ruRU: '',
+            [LOCALE_EN]: '',
+            [LOCALE_RU]: '',
         },
         avatar: undefined,
         goalFinishDate: new Date(),
@@ -34,6 +36,22 @@ const dataSlice = createSlice({
             },
             elems: {},
             elemsOrder: [],
+        },
+        rewards: {
+            locale: [LOCALE_DEFAULT],
+            newElem: {
+                [LOCALE_RU]: {
+                    name: '',
+                    description: '',
+                },
+                [LOCALE_EN]: {
+                    name: '',
+                    description: '',
+                },
+                cost: 0,
+            },
+            rewards: {},
+            rewardOrder: [],
         },
     },
     reducers: {
@@ -124,7 +142,6 @@ const dataSlice = createSlice({
             const reqUrl = action.payload.url;
             const elems = [...state.mediaContent.elemsOrder];
 
-            console.log(newPosition);
             if (newPosition >= 0 && newPosition < elems.length) {
                 let oldPosition;
                 let buf;
@@ -140,6 +157,78 @@ const dataSlice = createSlice({
                 state.mediaContent.elemsOrder = elems;
             }
         },
+        setRewardsLocale: (state, action) => {
+            state.rewards.locale = action.payload;
+        },
+        setRewardsNewElemName: (state, action) => {
+            const locale = state.rewards.locale;
+
+            state.rewards.newElem[locale].name = action.payload;
+        },
+        setRewardsNewElemDescription: (state, action) => {
+            const locale = state.rewards.locale;
+
+            state.rewards.newElem[locale].description = action.payload;
+        },
+        setRewardsNewElemCost: (state, action) => {
+            const cost = action.payload;
+
+            if (cost > -1) {
+                state.rewards.newElem.cost = action.payload;
+            }
+        },
+        addReward: (state) => {
+            const rewards = state.rewards;
+            const id = rewards.newElem[LOCALE_EN].name || rewards.newElem[LOCALE_RU].name;
+
+            if (id && !(rewards.rewards[id])) {
+                state.rewards.rewards = {
+                    ...rewards.rewards,
+                    [id]: {
+                        ...rewards.newElem,
+                    },
+                }
+                state.rewards.rewardOrder.push(id);
+            }
+        },
+        changeRewardPosition: (state, action) => {
+            const { id, position } = action.payload;
+            const order = [...state.rewards.rewardOrder];
+            const maxLen = order.length;
+            let oldPosition;
+            let buff;
+
+            if ((position < maxLen) && (position >= 0)) {
+                for (let i = 0; i < maxLen; i++) {
+                    if (order[i] === id) {
+                        oldPosition = i;
+                        break;
+                    }
+                }
+                buff = order[oldPosition];
+                order[oldPosition] = order[position];
+                order[position] = buff;
+                state.rewards.rewardOrder = order;
+            }
+        },
+        removeReward: (state, action) => {
+            const id = action.payload;
+            let order = [...state.rewards.rewardOrder];
+            let rewards = { ...state.rewards.rewards };
+            const position = order.findIndex((value) => {
+                return id === value;
+            });
+
+            delete rewards[id];
+            if (position >= 0) {
+                order = [
+                    ...order.slice(0, position),
+                    ...order.slice(position+1),
+                ];
+            }
+            state.rewards.rewards = rewards;
+            state.rewards.rewardOrder = order;
+        }
     }
 });
 
@@ -208,6 +297,39 @@ const mediaContentElemsOrderSelector = createSelector(
     mediaContentSelector,
     (content) => content.elemsOrder,
 );
+const rewardsSelector = createSelector(
+    dataSelector,
+    (data) => data.rewards,
+);
+const rewardsNewElemSelector = createSelector(
+    rewardsSelector,
+    (rewards) => {
+        const newElem = rewards.newElem;
+        return {
+            cost: newElem.cost,
+            ...newElem[rewards.locale]
+        }
+    },
+);
+const rewardsLocale = createSelector(
+    rewardsSelector,
+    (rewards) => rewards.locale,
+);
+const rewardsListSelector = createSelector(
+    rewardsSelector,
+    (rewards) => {
+        return rewards.rewardOrder.map((id) => {
+            const locale = rewards.locale;
+            const reward = rewards.rewards[id];
+
+            return {
+                id: id,
+                cost: reward.cost,
+                ...reward[locale],
+            }
+        });
+    },
+)
 
 export const selectors = {
     name: nameSelector,
@@ -224,6 +346,9 @@ export const selectors = {
     mediaContentNewElemPosition: mediaContentNewElemPositionSelector,
     mediaContentElems: mediaContentElemsSelector,
     mediaContentElemsOrder: mediaContentElemsOrderSelector,
+    rewardsNewElem: rewardsNewElemSelector,
+    rewardsLocale: rewardsLocale,
+    rewards: rewardsListSelector,
 }
 
 export const actions = {

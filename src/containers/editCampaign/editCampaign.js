@@ -18,6 +18,9 @@ const mapStateToProps = (state) => {
         goalFinishDate: selectors.goalFinishDate(state),
         goalSum: selectors.goalSum(state),
         mediaContent: selectors.mediaContent(state),
+        rewardsNewElem: selectors.rewardsNewElem(state),
+        rewardsLocale: selectors.rewardsLocale(state),
+        rewards: selectors.rewards(state),
     }
 }
 
@@ -65,7 +68,41 @@ const mapDispatchToPros = (dispatch) => {
         },
         changeMediaContentPosition: (url, position) => {
             dispatch(actions.changeMediaContentPosition({ url: url, position: position }));
-        }
+        },
+        onChangeRewardsNewElem: (type, value) => {
+            let act;
+
+            switch(type) {
+                case 'name':
+                    act = actions.setRewardsNewElemName(value);
+                    break;
+                case 'description':
+                    act = actions.setRewardsNewElemDescription(value);
+                    break;
+                case 'cost':
+                    act = actions.setRewardsNewElemCost(value);
+                    break;
+                default: return;
+            }
+            dispatch(act);
+        },
+        onChangeRewardsLocale: (locale) => {
+            dispatch(actions.setRewardsLocale(locale));
+        },
+        addReward: () => {
+            dispatch(actions.addReward());
+        },
+        onChangeRewardPosition: (id, position) => {
+            dispatch(
+                actions.changeRewardPosition({ 
+                    id: id, 
+                    position: position
+                })
+            );
+        },
+        onDeleteReward: (id) => {
+            dispatch(actions.removeReward(id));
+        },
     }
 }
 
