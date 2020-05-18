@@ -103,6 +103,10 @@ const mapDispatchToPros = (dispatch) => {
         onDeleteReward: (id) => {
             dispatch(actions.removeReward(id));
         },
+        onEditReward: (id) => {
+            dispatch(actions.editReward(id));
+            dispatch(actions.removeReward(id));
+        },
     }
 }
 

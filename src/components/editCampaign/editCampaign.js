@@ -18,6 +18,7 @@ import ImageUpload from '../imageUpload/imageUpload';
 import EditGoal from '../editGoal/editGoal';
 import EditMediaContent from '../editMediaContent/editMediaContent';
 import EditRewards from '../editRewards/editRewards';
+import Button from '@material-ui/core/Button';
 
 const locales = {
     [LOCALE_RU]: {
@@ -29,6 +30,8 @@ const locales = {
         avatarLabel: 'Аватар',
         goalLabel: 'Цель',
         mediaContentLabel: 'Содержание карусели',
+        applyButton: 'Отправить',
+        cancelButton: 'Отменить',
     },
     [LOCALE_EN]: {
         name: 'Name',
@@ -38,7 +41,9 @@ const locales = {
         descriptionLabel: 'Description',
         avatarLabel: 'Avatar',
         goalLabel: 'Goal',
-        mediaContentLabel: 'Carousel content'
+        mediaContentLabel: 'Carousel content',
+        applyButton: 'Apply',
+        cancelButton: 'Cancel',
     },
 }
 
@@ -91,6 +96,9 @@ export default function ({
     rewards,
     onChangeRewardPosition,
     onDeleteReward,
+    onEditReward,
+    onApply,
+    onCancel,
 }) {
     const localeSet = locales[useLocale()];
     const classes = useStyles();
@@ -312,8 +320,33 @@ export default function ({
                             rewards={rewards}
                             onChangePosition={onChangeRewardPosition}
                             onDelete={onDeleteReward}
+                            onEdit={onEditReward}
                         />
                     </Grid>
+                </Grid>
+            </Grid>
+            <Grid 
+                item 
+                container
+                justify='center'
+            >
+                <Grid item>
+                    <Button
+                        variant='contained'
+                        color='primary'
+                        onClick={onApply}
+                    >
+                        {localeSet.applyButton}
+                    </Button>
+                </Grid>
+                <Grid item>
+                    <Button
+                        cariant='contained'
+                        color='primary'
+                        onClick={onCancel}
+                    >
+                        {localeSet.cancelButton}
+                    </Button>
                 </Grid>
             </Grid>
         </Grid>

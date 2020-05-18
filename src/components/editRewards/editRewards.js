@@ -26,6 +26,7 @@ export default function ({
     onAdd,
     onChangePosition,
     onDelete,
+    onEdit,
 }) {
     const localeSet = locales[useLocale()];
 
@@ -89,6 +90,7 @@ export default function ({
                     rewards={rewards}
                     onChangePosition={onChangePosition}
                     onDelete={onDelete}
+                    onEdit={onEdit}
                 />
             </Grid>
         </Grid>

@@ -228,7 +228,14 @@ const dataSlice = createSlice({
             }
             state.rewards.rewards = rewards;
             state.rewards.rewardOrder = order;
-        }
+        }, 
+        editReward: (state, action) => {
+            const id = action.payload;
+            const reward = state.rewards.rewards[id];
+            state.rewards.newElem.cost = reward.cost;
+            state.rewards.newElem[LOCALE_RU] = {...reward[LOCALE_RU]};
+            state.rewards.newElem[LOCALE_EN] = {...reward[LOCALE_EN]};
+        },
     }
 });
 

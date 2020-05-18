@@ -15,6 +15,7 @@ function RewardWrapper({
     onDelete,
     onChangePosition,
     position,
+    onEdit,
 }) {
     const handleChangePosition = useCallback(
         (position) => {
@@ -37,7 +38,9 @@ function RewardWrapper({
                 container
                 direction='column'
             >
-                <IconButton>
+                <IconButton
+                    onClick={_ => onEdit(id)}
+                >
                     <Edit />
                 </IconButton>
                 <IconButton
@@ -93,6 +96,7 @@ export default function ({
     rewards,
     onChangePosition,
     onDelete,
+    onEdit,
 }) {
     return (
         <Grid
@@ -107,6 +111,7 @@ export default function ({
                         {...reward}
                         onChangePosition={onChangePosition}
                         onDelete={onDelete}
+                        onEdit={onEdit}
                     />
                 );
             }) : <div />}
