@@ -25,6 +25,9 @@ export const CAMPAING_TYPES = {
     HEALTH: 'health',
 };
 
+export const CLOUD_NAME = 'dspvo2e4p';
+export const CLOUD_UPLOAD_PRESET = 'kpuvrpa7';
+
 /*------------------------Temp----------------------------------*/
 export const MEDIA_CONTENT = [
     {

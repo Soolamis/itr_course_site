@@ -14,7 +14,7 @@ import MarkdownEditor from '../markdownEditor/markdownEditor';
 import SelectLocale from '../selectLocale/selectLocale';
 import Markdown from 'react-markdown';
 import TextWithLocale from '../textFieldWithSelectLocale/textFieldWithSelectLocale';
-import ImageUpload from '../imageUpload/imageUpload';
+import ImageUploader from '../imageUploader/imageUploader';
 import EditGoal from '../editGoal/editGoal';
 import EditMediaContent from '../editMediaContent/editMediaContent';
 import EditRewards from '../editRewards/editRewards';
@@ -189,9 +189,9 @@ export default function ({
                         </Grid>
                     </Grid>
                     <Grid item>
-                        <ImageUpload
-                            file={avatar}
-                            onUpdate={setAvatar}
+                        <ImageUploader
+                            img={avatar}
+                            onChange={setAvatar}
                         />
                     </Grid>
                 </Grid>

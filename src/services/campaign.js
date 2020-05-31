@@ -9,9 +9,12 @@ import {
     DESCRIPTION,
     REWARDS,
 } from '../constants';
+import axios from 'axios';
+import auth from '../app/auth';
 
 export async function getCampaignData(id) {
     return {
+        id: undefined,
         label: CAMPAING_LABEL,
         userRating: USER_RATING,
         averageRating: AVERAGE_RATING,
@@ -26,6 +29,36 @@ export async function getCampaignData(id) {
     }
 }
 
-export async function syncLabel(label) {
+export async function syncLabel() {
     return 'ok';
+}
+
+export async function updateCampaign(
+    id,
+    type,
+    avatar,
+    locale,
+    goal,
+    mediaContent,
+    rewards,
+) {
+    const token = await auth.getTokenSilently();
+
+    axios('/api/campaign/update',
+        {
+            method: 'post',
+            headers: {
+                Authorization: `Bearer ${token}`
+            },
+            data: {
+                id,
+                type,
+                avatar,
+                locale,
+                goal,
+                mediaContent,
+                rewards,
+            },
+        }
+    ).then(() => console.log('Done')).catch(err => console.log(err));
 }

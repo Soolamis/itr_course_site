@@ -21,6 +21,7 @@ import {
     EDIT_CAMPAING_CREATE,
     EDIT_CAMPAING_EDIT,
 } from './constants';
+import Main from './containers/main/main';
 
 const useStyles = makeStyles({
     mainContent: {
@@ -55,7 +56,7 @@ function App({
                 <Container className={classes.mainContent}>
                     <Switch>
                         <Route exact path='/'>
-
+                            <Main />
                         </Route>
                         <Route exact path='/auth'>
                             <Auth />

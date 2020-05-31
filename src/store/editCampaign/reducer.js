@@ -2,6 +2,7 @@ import {
     createSlice,
     combineReducers,
     createSelector,
+    createAsyncThunk,
 } from '@reduxjs/toolkit';
 import {
     CAMPAING_TYPES,
@@ -10,10 +11,53 @@ import {
     LOCALE_RU,
     MEDIA_IMAGE,
 } from '../../constants';
+import * as services from '../../services/campaign';
+
+const handleSend = createAsyncThunk(
+    'editCampaign/data/send',
+    async (_, { getState }) => {
+        const description = allDescriptionSelector(getState());
+        const name = allNameSelector(getState());
+        const mediaContent = mediaContentElemsOrderSelector(getState()).map(
+            (key) => {
+                return mediaContentElemsSelector(getState())[key];
+            }
+        );
+        const rawRewards = rewardsSelector(getState());
+        const rewards = rawRewards.rewardOrder.map((key) => {
+            return rawRewards.rewards[key];
+        });
+        const campaignType = campaignTypeSelector(getState());
+        const avatar = avatarSelector(getState());
+
+        await services.updateCampaign(
+            idSelector(getState()),
+            campaignType,
+            avatar,
+            {
+                [LOCALE_EN]: {
+                    name: name[LOCALE_EN],
+                    description: description[LOCALE_EN],
+                },
+                [LOCALE_RU]: {
+                    name: name[LOCALE_RU],
+                    description: description[LOCALE_RU],
+                }
+            },
+            {
+                goal: goalSumSelector(getState()),
+                date: goalFinishDateSelector(getState()),
+            },
+            mediaContent,
+            rewards
+        );
+    }
+);
 
 const dataSlice = createSlice({
     name: 'editCampaign/data',
     initialState: {
+        id: undefined,
         name: {
             [LOCALE_EN]: '',
             [LOCALE_RU]: '',
@@ -236,7 +280,7 @@ const dataSlice = createSlice({
             state.rewards.newElem[LOCALE_RU] = {...reward[LOCALE_RU]};
             state.rewards.newElem[LOCALE_EN] = {...reward[LOCALE_EN]};
         },
-    }
+    },
 });
 
 const editCampaignSelector = state => state.editCampaign;
@@ -244,6 +288,14 @@ const dataSelector = createSelector(
     editCampaignSelector,
     (state) => state.data,
 );
+const idSelector = createSelector(
+    dataSelector,
+    (data) => data.id,
+);
+const allNameSelector = createSelector(
+    dataSelector,
+    (data) => data.name,
+)
 const nameSelector = createSelector(
     dataSelector,
     (data) => data.name[data.nameLocale],
@@ -259,6 +311,10 @@ const nameLocaleSelector = createSelector(
 const descriptionLocaleSelector = createSelector(
     dataSelector,
     (data) => data.descriptionLocale,
+);
+const allDescriptionSelector = createSelector(
+    dataSelector,
+    (data) => data.description,
 );
 const descriptionSelector = createSelector(
     dataSelector,
@@ -360,6 +416,7 @@ export const selectors = {
 
 export const actions = {
     ...dataSlice.actions,
+    onSend: handleSend,
 }
 
 export default combineReducers({

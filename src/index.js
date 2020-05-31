@@ -7,12 +7,16 @@ import store from './store/configure';
 import * as serviceWorker from './serviceWorker';
 import { MuiPickersUtilsProvider } from '@material-ui/pickers';
 import Moment from '@date-io/moment';
+import { CloudinaryContext } from 'cloudinary-react';
+import { CLOUD_NAME } from './constants';
 
 ReactDOM.render(
   <React.StrictMode>
     <Provider store={store}>
       <MuiPickersUtilsProvider utils={Moment}>
-        <App />
+        <CloudinaryContext cloudName={CLOUD_NAME}>
+          <App />
+        </CloudinaryContext>
       </MuiPickersUtilsProvider>
     </Provider>
   </React.StrictMode>,

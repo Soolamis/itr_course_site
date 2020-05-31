@@ -15,6 +15,7 @@ import IconButton from '@material-ui/core/IconButton';
 import Left from '@material-ui/icons/ChevronLeft';
 import Right from '@material-ui/icons/ChevronRight';
 import { makeStyles } from '@material-ui/core/styles';
+import { Image as CldImage } from 'cloudinary-react';
 
 const useStyles = makeStyles({
     card: {
@@ -36,7 +37,7 @@ function Image({
 }) {
     return (
         <Box>
-            <img src={url} alt='elem' />
+            <CldImage publicId={url} width='300' />
         </Box>
     );
 }

@@ -1,8 +1,14 @@
 import React from 'react';
-import { FilePond } from 'react-filepond';
+import Uploader from '../imageUploader/imageUploader'
 
-export default function() {
+export default function ({
+    url,
+    onChange,
+}) {
     return (
-        <FilePond />
+        <Uploader 
+            img={url}
+            onChange={onChange}
+        />
     );
 }
