@@ -15,13 +15,13 @@ const locales = {
     ruRU: {
         page: {
             main: 'Главная',
-            campaings: 'Компании',
+            campaings: 'Создать компанию',
         }
     },
     enUS: {
         page: {
             main: 'Main',
-            campaings: 'Campaings',
+            campaings: 'Create new company',
         }
     },
 }
@@ -72,7 +72,7 @@ export default function MainMenu({
                     text={localeSet.page.main}
                 />
                 <NavLinkListItem
-                    to='/'
+                    to='/campaign/create'
                     icon={CampaingsIcon}
                     text={localeSet.page.campaings}
                 />

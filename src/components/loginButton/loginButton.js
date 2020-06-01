@@ -3,6 +3,7 @@ import Button from '@material-ui/core/Button';
 import Box from '@material-ui/core/Box';
 import auth0 from '../../app/auth';
 import classnames from 'classnames';
+import { useLocale } from '../../app/locale';
 
 const buttonsText = {
     ruRU: {
@@ -16,9 +17,9 @@ const buttonsText = {
 }
 
 export default function LoginButton({
-    locale = 'enUS',
     className,
 }) {
+    const locale = useLocale();
     const localeSet = buttonsText[locale];
 
     return (

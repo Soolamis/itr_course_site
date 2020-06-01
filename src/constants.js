@@ -1,3 +1,7 @@
+export const LOCALE_RU = 'ruRU';
+export const LOCALE_EN = 'enUS';
+export const LOCALE_DEFAULT = LOCALE_EN;
+
 export const MODE_EDIT = 'edit';
 export const MODE_USE = 'use';
 
@@ -11,6 +15,20 @@ export const SYNC_REJECTED = 'rejected';
 
 export const MEDIA_IMAGE = 'image';
 export const MEDIA_VIDEO = 'video';
+
+export const EDIT_CAMPAING_CREATE = 'create';
+export const EDIT_CAMPAING_EDIT = 'edit';
+
+export const CAMPAING_TYPES = {
+    EDUCATION: 'education',
+    SPORT: 'sport',
+    HEALTH: 'health',
+};
+
+export const CLOUD_NAME = 'dspvo2e4p';
+export const CLOUD_UPLOAD_PRESET = 'kpuvrpa7';
+
+export const CAMPAIGN_PER_PAGE = 6;
 
 /*------------------------Temp----------------------------------*/
 export const MEDIA_CONTENT = [

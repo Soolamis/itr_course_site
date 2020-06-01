@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import Grid from '@material-ui/core/Grid';
 import Carousel from '../carousel/carousel';
 import Tags from '../tags/tags';
@@ -8,14 +8,15 @@ import Rewards from '../rewards/rewards';
 import Comments from '../comments/comments';
 import News from '../news/news';
 import Rating from '../rating/rating';
-import EditableLabel from '../editableLabel/editableLabel';
+import Typography from '@material-ui/core/Typography';
+import { useLocale } from '../../app/locale';
+import IconButton from '@material-ui/core/IconButton';
+import EditIcon from '@material-ui/icons/Edit';
+import { useHistory } from 'react-router-dom';
 
 export default function Campaign({
+    id,
     label,
-    labelMode,
-    onToggleLabelMode,
-    onLabelChange,
-    canEdit,
     rating,
     onRatingChange,
     media,
@@ -23,21 +24,42 @@ export default function Campaign({
     goalEndDate,
     goalCurrent,
     description,
-    rewards
+    rewards,
+    canEdit,
 }) {
+    const locale = useLocale();
+    const history = useHistory();
+    const handleEdit = useCallback(() => {
+        history.push(`/campaign/edit/${id}`)
+    }, [history, id]);
+
     return (
         <Grid
             container
             direction='column'
         >
+            <Grid
+                container
+                justify='space-between'
+            >
+                <Grid
+                    item
+                    xs={11}
+                >
+                    <Typography variant='h3'>
+                        {label[locale] || ''}
+                    </Typography>
+                </Grid>
+                <Grid item xs={1}>
+                    {canEdit ?
+                        <IconButton onClick={handleEdit}>
+                            <EditIcon />
+                        </IconButton>
+                        : <div></div>}
+                </Grid>
+            </Grid>
             <Grid item>
-                <EditableLabel
-                    value={label}
-                    mode={labelMode}
-                    onButtonClick={onToggleLabelMode}
-                    onChange={onLabelChange}
-                    canEdit={canEdit}
-                />
+
             </Grid>
             <Grid item>
                 <Rating
@@ -75,10 +97,10 @@ export default function Campaign({
                     sm={8}
                     xs={12}
                 >
-                    <CampaignDescription value={description}/>
+                    <CampaignDescription value={description[locale] || ''} />
                     <News />
                 </Grid>
-                <Grid 
+                <Grid
                     item
                     sm={4}
                     xs={12}

@@ -5,7 +5,7 @@ import {
     Slide,
     ButtonBack,
     ButtonNext,
-    Image,
+    //Image,
 } from 'pure-react-carousel';
 import 'pure-react-carousel/dist/react-carousel.es.css';
 import { makeStyles } from '@material-ui/core/styles';
@@ -15,6 +15,7 @@ import Box from '@material-ui/core/Box';
 import classnames from 'classnames'
 import ReactPlayer from 'react-player';
 import { MEDIA_IMAGE, MEDIA_VIDEO } from '../../constants';
+import { Image } from 'cloudinary-react';
 
 const useStyle = makeStyles({
     button: {
@@ -52,13 +53,10 @@ const useStyle = makeStyles({
 function ImageWrapper({
     src
 }) {
-    const imageClass = useStyle().image;
-
     return (
-        <Image 
-            className={imageClass}
-            src={src} 
-            hasMasterSpinner={true}
+        <Image
+            publicId={src}
+            width='100%'
         />
     );
 }
@@ -82,13 +80,13 @@ const ChooseComponent = {
 
 function SlideComponent({
     type,
-    src,
+    url,
 }) {
     const Component = ChooseComponent[type];
 
     return (
         <Slide>
-            <Component src={src} />
+            <Component src={url} />
         </Slide>
     );
 }

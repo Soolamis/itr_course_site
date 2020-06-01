@@ -16,6 +16,13 @@ import { login } from './store/user/actions';
 import Campaign from './containers/campaign/campaign';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
+import EditCampaing from './containers/editCampaign/editCampaign';
+import {
+    EDIT_CAMPAING_CREATE,
+    EDIT_CAMPAING_EDIT,
+} from './constants';
+import Main from './containers/main/main';
+import { actions as campaignTypeActions } from './store/campaignTypes/reducer';
 
 const useStyles = makeStyles({
     mainContent: {
@@ -39,24 +46,29 @@ function App({
             .catch(err => console.log(err));
     }, [dispatch]);
 
+    useEffect(() => {
+        dispatch(campaignTypeActions.init());
+    }, [dispatch])
+
     return (
         <div>
             <Router>
                 <Header pageName='main' />
+                <MainMenu
+                    isOpen={menuIsOpen}
+                    onClose={() => dispatch(toggleMenu())}
+                />
                 <Container className={classes.mainContent}>
                     <Switch>
                         <Route exact path='/'>
-                            <MainMenu
-                                isOpen={menuIsOpen}
-                                onClose={() => dispatch(toggleMenu())}
-                            />
+                            <Main />
                         </Route>
                         <Route exact path='/auth'>
                             <Auth />
                         </Route>
-                        <Route exact path='/campaing/:id'>
-                            <Campaign />
-                        </Route>
+                        <Route exact path='/campaign/create' component={EditCampaing} />
+                        <Route exact path='/campaign/edit/:id' component={EditCampaing}/>
+                        <Route exact path='/campaign/:id' component={Campaign} />
                     </Switch>
                 </Container>
             </Router>
