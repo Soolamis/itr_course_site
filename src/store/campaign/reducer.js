@@ -5,44 +5,60 @@ import {
     createSelector,
 } from '@reduxjs/toolkit';
 import * as service from '../../services/campaign';
-import { 
-    LOADING_PENDING, 
-    LOADING_IDLE, 
-    MODE_EDIT, 
-    MODE_USE,
-    SYNC_IDLE,
-    SYNC_PENDING,
-    SYNC_REJECTED,
-    SYNC_COMPLETE,
-} from '../../constants';
+
+function extractFromLocale(locale, field) {
+    let res = {};
+    Object.keys(locale).forEach((key) => {
+        res = {...res, [key]: locale[key][field]}
+    });
+    return res;
+}
+
+function generateLabel(locale) {
+    return extractFromLocale(locale, 'name');
+}
+
+function generateDescription(locale) {
+    return extractFromLocale(locale, 'description');
+}
 
 const initPage = createAsyncThunk(
     'campaign/initPage',
     async (id) => {
-        return await service.getCampaignData(id);
+        const data = await service.getCampaignData(id);
+        const label = generateLabel(data.locale);
+        const description = generateDescription(data.locale);
+
+        return {
+            label: label,
+            owner: data.owner,
+            media: data.media,
+            goal: {
+                goal: data.goal.goal,
+                current: 0,
+                finishDate: new Date(data.goal.date),
+            },
+            description: description,
+            rewards: data.rewards,
+        }
     },
-);
-const syncLabel = createAsyncThunk(
-    'campaign/syncLabel',
-    async(_, thunkAPI) => {
-        return await service.syncLabel(selectors.label(thunkAPI.getState()));
-    }
 );
 
 const dataSlice = createSlice({
     name: 'campaign/data',
     initialState: {
-        label: '',
+        label: {},
         averageRating: 0,
         userRating: 0,
         media: [],
         goal: {
             goal: 0,
             current: 0,
-            endDate: Date.now(),
+            finishDate: Date.now(),
         },
-        description: '',
+        description: {},
         rewards: [],
+        owner: '',
     },
     reducers: {
         setLabel(state, action) {
@@ -62,42 +78,9 @@ const dataSlice = createSlice({
     }
 });
 
-const uiSlice = createSlice({
-    name: 'campaign/ui',
-    initialState: {
-        label: {
-            mode: MODE_USE,
-            syncStatus: SYNC_IDLE,
-            error: '',
-        },
-        canEdit: false,
-        loading: LOADING_IDLE,
-    },
-    reducers: {
-        setLabelMode(state, action) {
-            state.label.mode = action.payload;
-        },
-        toggleLabelMode(state, action) {
-            state.label.mode = (state.label.mode === MODE_EDIT) ? MODE_USE : MODE_EDIT;
-        }, 
-    },
-    extraReducers: {
-        [initPage.pending]: (state, action) => { state.loading = LOADING_PENDING },
-        [initPage.fulfilled]: (state) => { state.loading = LOADING_IDLE },
-
-        [syncLabel.pending]: (state) => { state.label.syncStatus = SYNC_PENDING },
-        [syncLabel.rejected]: (state) => { state.label.syncStatus = SYNC_REJECTED },
-        [syncLabel.fulfilled]: (state) => { state.label.syncStatus = SYNC_COMPLETE },
-    }
-});
-
 export const actions = {
-    setLabel: dataSlice.actions.setLabel,
-    setLabelMode: uiSlice.actions.setLabelMode,
-    toggleLabelMode: uiSlice.actions.toggleLabelMode,
     setUserRating: dataSlice.actions.setUserRating,
     initPage: initPage,
-    syncLabel: syncLabel,
 }
 
 const campaignSelector = state => state.campaign;
@@ -105,11 +88,6 @@ const dataSelector = createSelector(
     campaignSelector,
     (state) => state.data,
 );
-const uiSelector = createSelector(
-    campaignSelector,
-    (state) => state.ui,
-);
-
 const labelValueSelector = createSelector(
     dataSelector,
     (data) => data.label,
@@ -140,7 +118,7 @@ const goalCurrentSelector = createSelector(
 );
 const goalEndDateSelector = createSelector(
     goalSelector,
-    (goal) => goal.endDate,
+    (goal) => goal.finishDate,
 );
 const descriptionSelector = createSelector(
     dataSelector,
@@ -150,34 +128,13 @@ const rewardsSelector = createSelector(
     dataSelector,
     (data) => data.rewards,
 );
-
-const labelUiSelector = createSelector(
-    uiSelector,
-    (ui) => ui.label,
-);
-const labelModeSelector = createSelector(
-    labelUiSelector,
-    (label) => label.mode,
-);
-const labelSyncStatusSelector = createSelector(
-    labelUiSelector,
-    (label) => label.syncStatus,
-);
-const labelSyncErrorSelector = createSelector(
-    labelUiSelector,
-    (label) => label.error,
-)
-const canEditSelector = createSelector(
-    uiSelector,
-    (ui) => ui.canEdit,
+const ownerSelector = createSelector(
+    dataSelector,
+    (data) => data.owner,
 );
 
 export const selectors = {
     label: labelValueSelector,
-    labelMode: labelModeSelector,
-    canEdit: canEditSelector,
-    labelSyncStatus: labelSyncStatusSelector,
-    labelSyncError: labelSyncErrorSelector,
     userRating: userRatingSelector,
     averageRating: averageRatingSelector,
     media: mediaSelector,
@@ -186,9 +143,9 @@ export const selectors = {
     goalEndDate: goalEndDateSelector,
     description: descriptionSelector,
     rewards: rewardsSelector,
+    owner: ownerSelector,
 }
 
 export default combineReducers({
     data: dataSlice.reducer,
-    ui: uiSlice.reducer
 });

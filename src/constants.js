@@ -28,6 +28,8 @@ export const CAMPAING_TYPES = {
 export const CLOUD_NAME = 'dspvo2e4p';
 export const CLOUD_UPLOAD_PRESET = 'kpuvrpa7';
 
+export const CAMPAIGN_PER_PAGE = 6;
+
 /*------------------------Temp----------------------------------*/
 export const MEDIA_CONTENT = [
     {

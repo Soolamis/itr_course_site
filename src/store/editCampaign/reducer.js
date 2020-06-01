@@ -51,7 +51,42 @@ const handleSend = createAsyncThunk(
             mediaContent,
             rewards
         );
-    }
+    },
+);
+
+function extractFromLocale(locale, field) {
+    let res = {};
+    Object.keys(locale).forEach((key) => {
+        res = {...res, [key]: locale[key][field]}
+    });
+    return res;
+}
+
+function generateName(locale) {
+    return extractFromLocale(locale, 'name');
+}
+
+function generateDescription(locale) {
+    return extractFromLocale(locale, 'description');
+}
+
+
+const init = createAsyncThunk(
+    'editCampaign/data/get',
+    async (id) => {
+        const data = await services.getCampaignData(id);
+        return {
+            id: data.id,
+            name: generateName(data.locale),
+            campaignType: data.type,
+            description: generateDescription(data.locale),
+            avatar: data.avatar,
+            goalSum: data.goal.goal,
+            goalFinishDate: data.goal.date,
+            mediaContent: data.media,
+            rewards: data.rewards,
+        }
+    },
 );
 
 const dataSlice = createSlice({
@@ -281,6 +316,52 @@ const dataSlice = createSlice({
             state.rewards.newElem[LOCALE_EN] = {...reward[LOCALE_EN]};
         },
     },
+    extraReducers: {
+        [init.fulfilled]: (state, action) => {
+            Object.keys(action.payload).forEach((field) => {
+                let content = {};
+                let order = [];
+                switch(field) {
+                    default: 
+                        state[field] = action.payload[field];
+                        break;
+                    case 'mediaContent':
+                        order = action.payload[field].map(
+                            (obj) => {
+                                content = {
+                                    ...content,
+                                    [obj.url]: {
+                                        url: [obj.url],
+                                        type: [obj.type],
+                                    }
+                                }
+                                return obj.url;
+                            });
+                        state.mediaContent.elems = content;
+                        state.mediaContent.elemsOrder = order;
+                        break;
+                    case 'rewards':
+                        content = {};
+                        order = action.payload[field].map(
+                            (obj) => {
+                                const id = obj.locale[LOCALE_EN].name||obj.locale[LOCALE_RU].name;
+                                content = {
+                                    ...content,
+                                    [id]: {
+                                        cost: obj.cost,
+                                        ...obj.locale,
+                                    }
+                                }
+                                return id;
+                            },
+                        );
+                        state.rewards.rewards = content;
+                        state.rewards.rewardOrder = order;
+                        break;
+                }
+            });
+        }
+    },
 });
 
 const editCampaignSelector = state => state.editCampaign;
@@ -417,6 +498,7 @@ export const selectors = {
 export const actions = {
     ...dataSlice.actions,
     onSend: handleSend,
+    init: init,
 }
 
 export default combineReducers({

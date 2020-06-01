@@ -2,6 +2,7 @@ import React from 'react';
 import Grid from '@material-ui/core/Grid';
 import Reward from '../reward/reward';
 import { makeStyles } from '@material-ui/core/styles';
+import { useLocale } from '../../app/locale'
 
 const useStyles = makeStyles({
     root: {
@@ -11,10 +12,11 @@ const useStyles = makeStyles({
 
 function RewardWrapper({
     cost,
-    label,
-    description,
+    locale: localeData,
     onClickButton,
 }) {
+    const locale = useLocale();
+
     return (
         <Grid
             item
@@ -22,8 +24,8 @@ function RewardWrapper({
         >
             <Reward
                 cost={cost}
-                label={label}
-                description={description}
+                label={localeData[locale].name}
+                description={localeData[locale].description}
                 onClickButton={onClickButton}
             />
         </Grid>

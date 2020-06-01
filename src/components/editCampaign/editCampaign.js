@@ -57,11 +57,13 @@ function generateMenuItem(value) {
     const items = Object.keys(value)
         .map((elem) => ({ value: elem, label: value[elem] }));
 
-    return items.map((elem) => (
-        <MenuItem key={elem.value} value={elem.value}>
-            {elem.label}
-        </MenuItem>
-    ));
+    return items.map((elem) => {
+        return (
+            <MenuItem key={elem.value} value={elem.value}>
+                {elem.label}
+            </MenuItem>
+        );
+    });
 }
 
 export default function ({
@@ -99,8 +101,10 @@ export default function ({
     onEditReward,
     onApply,
     onCancel,
+    campaignTypes,
 }) {
-    const localeSet = locales[useLocale()];
+    const locale = useLocale();
+    const localeSet = locales[locale];
     const classes = useStyles();
 
     return (
@@ -166,7 +170,18 @@ export default function ({
                                     onChange={e => setCampaignType(e.target.value)}
                                     fullWidth
                                 >
-                                    {generateMenuItem(localeSet.campaignTypes)}
+                                    {campaignTypes ?
+                                        generateMenuItem((() => {
+                                            let res = {};
+                                            Object.keys(campaignTypes).forEach(key => {
+                                                res = {
+                                                    ...res,
+                                                    [key]: campaignTypes[key][locale],
+                                                }
+                                            })
+                                            return res;
+                                        })()): <div></div>
+                                    }
                                 </Select>
                             </FormControl>
                         </Grid>
@@ -239,7 +254,7 @@ export default function ({
                         item
                         xs={12}
                     >
-                        <EditMediaContent 
+                        <EditMediaContent
                             newElemType={mediaContent.newElem.type}
                             onChangeNewElemType={setMediaContentNewElemType}
                             newElemUrl={mediaContent.newElem.url}
@@ -307,11 +322,11 @@ export default function ({
                             <Markdown source={description} />
                         </Grid>
                     </Grid>
-                    <Grid 
+                    <Grid
                         item
                         xs={12}
                     >
-                        <EditRewards 
+                        <EditRewards
                             onChangeNewElem={onChangeRewardsNewElem}
                             newElem={rewardsNewElem}
                             onChangeLocale={onChangeRewardsLocale}
@@ -325,8 +340,8 @@ export default function ({
                     </Grid>
                 </Grid>
             </Grid>
-            <Grid 
-                item 
+            <Grid
+                item
                 container
                 justify='center'
             >

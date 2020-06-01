@@ -5,6 +5,8 @@ import userReducer from './user/reducer';
 import campaignReducer from './campaign/reducer';
 import editCampaignReducer from './editCampaign/reducer';
 import localeReducer from './locale/reducer';
+import campaignTypesReducer from './campaignTypes/reducer';
+import mainPageReducer from './mainPage/reducer';
 
 var store = configureStore({
     reducer: {
@@ -13,6 +15,8 @@ var store = configureStore({
         campaign: campaignReducer,
         editCampaign: editCampaignReducer,
         locale: localeReducer,
+        campaignTypes: campaignTypesReducer,
+        mainPage: mainPageReducer,
     }, 
     middleware: [...getDefaultMiddleware(), thunk]
 })

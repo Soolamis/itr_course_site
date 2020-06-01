@@ -1,9 +1,17 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { connect } from 'react-redux'
 import EditCampaignComponent from '../../components/editCampaign/editCampaign';
 import { actions, selectors } from '../../store/editCampaign/reducer';
+import { selectors as campaignTypes } from '../../store/campaignTypes/reducer';
 
 const EditCampaign = (props) => {
+    const { match: { params: { id } }, init } = props;
+    useEffect(() => {
+        if (id) {
+            init(id);
+        }
+    }, [id, init]);
+
     return <EditCampaignComponent {...props} />
 }
 
@@ -21,6 +29,7 @@ const mapStateToProps = (state) => {
         rewardsNewElem: selectors.rewardsNewElem(state),
         rewardsLocale: selectors.rewardsLocale(state),
         rewards: selectors.rewards(state),
+        campaignTypes: campaignTypes.types(state),
     }
 }
 
@@ -109,7 +118,10 @@ const mapDispatchToPros = (dispatch) => {
         },
         onApply: () => {
             dispatch(actions.onSend());
-        }
+        },
+        init: (id) => {
+            dispatch(actions.init(id));
+        },
     }
 }
 

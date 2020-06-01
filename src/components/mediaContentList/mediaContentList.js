@@ -68,14 +68,12 @@ function Elem({
     const classes = useStyles();
 
     let Component;
-    switch (type) {
-        case MEDIA_IMAGE:
+    if (type == MEDIA_IMAGE) {
             Component = Image;
-            break;
-        case MEDIA_VIDEO:
+    } else if (type == MEDIA_VIDEO) {
             Component = Video;
-            break;
-        default: throw Error(`Wrong media type ${type}`);
+    } else {
+        throw Error(`Wrong media type ${type}`);
     }
 
     return (

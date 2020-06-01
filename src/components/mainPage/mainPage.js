@@ -1,18 +1,51 @@
 import React from 'react';
 import Box from '@material-ui/core/Box';
-import { Link } from 'react-router-dom';
-import Button from '@material-ui/core/Button';
+import Grid from '@material-ui/core/Grid';
+import CampaignList from '../campaignList/campaignList';
 
-export default function() {
+function CampaignListItem(props) {
+    return (
+        <Grid 
+            item
+            xs={12}
+        >
+            <CampaignList {...props}/>
+        </Grid>
+    );
+}
+
+function generateCampaignLists(campaigns, types, pagination, typeNames, onChange) {
+    if(types === {}) {
+       return <div></div> 
+    } else {
+        return Object.keys(types).map(
+            (key) => {
+                return (
+                    <CampaignListItem 
+                        name={typeNames[key]}
+                        campaigns={types[key].map((id) => {
+                            return {id: id, ...campaigns[id]};
+                        })}
+                        page={pagination[key]}
+                        onChange={(page) => onChange(key, page)}
+                    />
+                );
+            });
+    }
+}
+
+export default function ({
+    campaigns,
+    types,
+    pagination,
+    typeNames,
+    onChangePage,
+}) {
     return (
         <Box>
-            <Button
-                variant='contained'
-                component={Link}
-                to='/campaign/create'
-            >
-                create
-            </Button>
+            <Grid container>
+                {generateCampaignLists(campaigns, types, pagination, typeNames, onChangePage)}
+            </Grid>
         </Box>
     );
 }

@@ -22,6 +22,7 @@ import {
     EDIT_CAMPAING_EDIT,
 } from './constants';
 import Main from './containers/main/main';
+import { actions as campaignTypeActions } from './store/campaignTypes/reducer';
 
 const useStyles = makeStyles({
     mainContent: {
@@ -45,6 +46,10 @@ function App({
             .catch(err => console.log(err));
     }, [dispatch]);
 
+    useEffect(() => {
+        dispatch(campaignTypeActions.init());
+    }, [dispatch])
+
     return (
         <div>
             <Router>
@@ -61,12 +66,9 @@ function App({
                         <Route exact path='/auth'>
                             <Auth />
                         </Route>
-                        <Route exact path='/campaign/create'>
-                            <EditCampaing type={EDIT_CAMPAING_CREATE} />
-                        </Route>
-                        <Route exact path='/campaign/:id'>
-                            <Campaign />
-                        </Route>
+                        <Route exact path='/campaign/create' component={EditCampaing} />
+                        <Route exact path='/campaign/edit/:id' component={EditCampaing}/>
+                        <Route exact path='/campaign/:id' component={Campaign} />
                     </Switch>
                 </Container>
             </Router>

@@ -3,6 +3,7 @@ import Typography from '@material-ui/core/Typography';
 import Progress from '@material-ui/core/LinearProgress';
 import Grid from '@material-ui/core/Grid';
 import { makeStyles } from '@material-ui/core/styles';
+import { useLocale } from '../../app/locale';
 
 const locales = {
     ruRU: {
@@ -29,11 +30,11 @@ const useStyles = makeStyles({
 });
 
 export default function Goal({
-    locale = 'enUS',
     date,
     goal,
     current,
 }) {
+    const locale = useLocale();
     const classes = useStyles();
     const localeSet = locales[locale];
 
