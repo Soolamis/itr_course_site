@@ -8,6 +8,8 @@ import { makeStyles } from '@material-ui/core/styles';
 import localeSets from './locale';
 import HeaderUserWidget from '../../containers/headerUserWidget/headerUserWidget';
 import Hidden from '@material-ui/core/Hidden';
+import { useLocale } from '../../app/locale'
+import TranslateIcon from '@material-ui/icons/Translate'
 
 const useStyles = makeStyles((theme) => ({
     menuButton: {
@@ -21,10 +23,11 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function Header({
-    locale = 'enUS',
     onMenuButtonClick,
     pageName,
+    onToggleLanguage,
 }) {
+    const locale = useLocale();
     const styles = useStyles();
     const localeSet = localeSets[locale];
 
@@ -44,6 +47,12 @@ export default function Header({
                 >
                     {localeSet.pageName[pageName]}
                 </Typography>
+                <IconButton 
+                    className={styles.menuButton}
+                    onClick={onToggleLanguage}
+                >
+                    <TranslateIcon />
+                </IconButton>
                 <Hidden xsDown>
                     <HeaderUserWidget />
                 </Hidden>

@@ -3,6 +3,7 @@ import Typography from '@material-ui/core/Typography';
 import Markdown from 'react-markdown';
 import Box from '@material-ui/core/Box';
 import { makeStyles } from '@material-ui/core/styles';
+import { useLocale } from '../../app/locale';
 
 const useStyles = makeStyles({
     root: {
@@ -20,9 +21,9 @@ const locales = {
 }
 
 export default function CampaignDescription({
-    locale = 'enUS',
     value,
 }) {
+    const locale = useLocale();
     const localeSet = locales[locale];
     const classes = useStyles();
 
